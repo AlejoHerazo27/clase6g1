@@ -109,18 +109,43 @@ def main():
             if servicio_hospitalario.verificarExiste(historia) == False:
                 nombre=input("Ingrese el nombre de la mascota: ")
                 tipo=input("Ingrese el tipo de mascota (felino o canino): ")
+                caninos = {}
+                felinos = {}
+
+
                 peso=int(input("Ingrese el peso de la mascota: "))
-                fecha=input("Ingrese la fecha de ingreso (dia/mes/año): ")
+                while True:
+                    fecha=input("Ingrese la fecha de ingreso (dia/mes/año): ")
+                    if len(fecha) == 10 and fecha[2] == "/" and fecha[5] == "/":
+                        try:
+                            dia = int(fecha[:2])
+                            mes = int(fecha[3:5])
+                            año = int(fecha[6:])
+                            if 1 <= dia <= 31 and 1 <= mes <= 12 and 1900 <= año <= 2100:
+                                break
+                            else:
+                                print("Fecha inválida. Ingrese nuevamente.")
+                        except ValueError:
+                            print("Fecha inválida. Ingrese nuevamente.")
+                    else:
+                        print("Formato de fecha incorrecto. Ingrese nuevamente.")
                 nm=int(input("Ingrese cantidad de medicamentos: "))
                 lista_med=[]
 
                 for i in range(0,nm):
                     nombre_medicamentos = input("Ingrese el nombre del medicamento: ")
                     dosis =int(input("Ingrese la dosis: "))
-                    medicamento = Medicamento()
-                    medicamento.asignarNombre(nombre_medicamentos)
-                    medicamento.asignarDosis(dosis)
-                    lista_med.append(medicamento)
+                    medicamento_existente = False
+                    for medicamento in lista_med:
+                        if medicamento.verNombre() == nombre_medicamentos:
+                            print("El medicamento ya está en la lista.")
+                            medicamento_existente = True
+                            break
+                    if not medicamento_existente:
+                        medicamento = Medicamento()
+                        medicamento.asignarNombre(nombre_medicamentos)
+                        medicamento.asignarDosis(dosis)
+                        lista_med.append(medicamento)
 
                 mas= Mascota()
                 mas.asignarNombre(nombre)
